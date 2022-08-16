@@ -62,10 +62,11 @@ USER_HOME="/home/$USER_NAME"
 # ./bootstrap.sh
 
 apt-get -q update
+apt-mark unhold linux-image-generic
 apt-get --yes upgrade
 
 # Install linux headers
-apt-get install --yes build-essential linux-headers-generic linux-headers-5.15.0-25
+apt-get install --yes build-essential linux-headers-generic
 
 # Adding VBox guest additions
 apt-get install --yes virtualbox-guest-x11
@@ -81,7 +82,13 @@ apt-get install --yes python-all-dev
 
 # Adding back LibreOffice and other packages that were removed from iso to save disk space
 apt-get --yes install libreoffice libreoffice-common libreoffice-core 2048-qt noblenote trojita \
-  transmission-common k3b vlc libllvm14 fonts-noto-cjk
+  transmission-common k3b vlc libllvm14 fonts-dejavu fonts-dejavu-extra xfonts-scalable \
+  xfonts-100dpi xfonts-75dpi xfonts-jmk fonts-lyx unifont fonts-noto-core fonts-noto \
+  fonts-noto-cjk fonts-noto-mono
+
+# Remove patches needed for the live session only
+rm "$USER_HOME"/.config/autostart/apache-fixer.desktop
+rm "$USER_HOME"/.config/autostart/desktop-truster.desktop
 
 # Install R Studio
 cd ~
@@ -89,6 +96,7 @@ apt-get --yes install libclang-dev
 wget https://download2.rstudio.org/server/jammy/amd64/rstudio-server-2022.07.0-548-amd64.deb
 dpkg -i rstudio-server-2022.07.0-548-amd64.deb
 rm rstudio-server-2022.07.0-548-amd64.deb
+systemctl disable rstudio-server
 # TODO: Install Atom or VS Code
 
 # Install docker engine
@@ -110,6 +118,9 @@ cd "$DIR"
 ./install_etf.sh
 ./install_pgadmin.sh
 # ./install_icons_and_menus.sh
+
+# Cleanup
+rm -rf /tmp/build_*
 
 echo
 echo "==============================================================="
