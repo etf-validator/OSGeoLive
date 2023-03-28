@@ -4,7 +4,7 @@
 # Purpose: This script will install QGIS including Python and GRASS support,
 #
 #############################################################################
-# Copyright (c) 2009-2020 The Open Source Geospatial Foundation and others.
+# Copyright (c) 2009-2023 The Open Source Geospatial Foundation and others.
 # Licensed under the GNU LGPL version >= 2.1.
 #
 # This library is free software; you can redistribute it and/or modify it
@@ -50,9 +50,9 @@ fi
 
 # Install plugins
 wget -c --progress=dot:mega \
-   "http://download.osgeo.org/livedvd/data/qgis/qgis3-osgeolive13-plugins.zip"
-unzip -q qgis3-osgeolive13-plugins.zip -d /
-rm -rf qgis3-osgeolive13-plugins.zip
+   "http://download.osgeo.org/livedvd/data/qgis/qgis3-osgeolive15-plugins.zip"
+unzip -q qgis3-osgeolive15-plugins.zip -d /
+rm -rf qgis3-osgeolive15-plugins.zip
 
 #### install desktop icon ####
 INSTALLED_VERSION=`dpkg -s qgis | grep '^Version:' | awk '{print $2}' | cut -f1 -d~`

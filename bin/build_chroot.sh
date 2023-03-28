@@ -7,7 +7,7 @@
 #          Angelos Tzotsos <tzotsos@gmail.com>
 #
 #############################################################################
-# Copyright (c) 2013-2022 Open Source Geospatial Foundation (OSGeo) and others.
+# Copyright (c) 2013-2023 Open Source Geospatial Foundation (OSGeo) and others.
 #
 # Licensed under the GNU LGPL.
 # 
@@ -118,7 +118,7 @@ echo
 echo "Installing build tools"
 echo "======================"
 
-sudo apt-get install --yes squashfs-tools genisoimage syslinux-utils lzip binwalk lz4
+sudo apt-get install --yes squashfs-tools genisoimage syslinux-utils lzip binwalk lz4 xorriso
 
 #TODO add wget to grab a fresh image, optional
 
@@ -133,7 +133,7 @@ cd "$BUILD_HOME"/livecdtmp
 #mv ubuntu-9.04-desktop-i386.iso ~/livecdtmp
 UBU_MIRROR="http://cdimage.ubuntu.com"
 UBU_RELEASE="22.04"
-ISO_RELEASE="22.04"
+ISO_RELEASE="22.04.1"
 # ISO_RELEASE="22.04-beta"
 UBU_ISO="lubuntu-${ISO_RELEASE}-desktop-$ARCH.iso"
 wget -c --progress=dot:mega \
@@ -144,6 +144,14 @@ wget -c --progress=dot:mega \
 mkdir mnt
 sudo mount -o loop "$UBU_ISO" mnt
 echo "Lubuntu $ISO_RELEASE $ARCH image mounted."
+
+#Extract iso EFI and MBR partitions
+EFI=efi.partition
+MBR=mbr.partition
+dd if="$UBU_ISO" bs=1 count=446 of="$MBR"
+EFISKIP=$(/sbin/fdisk -l "$UBU_ISO" | fgrep '.iso2 ' | awk '{print $2}')
+EFISIZE=$(/sbin/fdisk -l "$UBU_ISO" | fgrep '.iso2 ' | awk '{print $4}')
+dd if="$UBU_ISO" bs=512 skip="$EFISKIP" count="$EFISIZE" of="$EFI"
 
 #Extract .iso contents into dir 'extract-cd' 
 mkdir "extract-cd"
@@ -208,7 +216,7 @@ echo "======================================"
 #Method 2 hardcode default kernel from Lubuntu
 #need to repack the initrd.lz to pick up the change to casper.conf and kernel update
 #Use mkinitramfs to extract the initrd from current chroot (with potential new kernel)
-# sudo chroot edit mkinitramfs -c lz4 -o /initrd 5.15.0-25-generic
+# sudo chroot edit mkinitramfs -c lz4 -o /initrd 5.15.0-43-generic
 #or just copy the existing initrd if no change happened to the kernel version
 # cp extract-cd/casper/initrd edit/initrd
 #offset at second LZ4 tag because the new packaging of initrd has 3 parts now
@@ -372,10 +380,35 @@ echo "======================================"
 #Create the ISO image
 #isohybrid used only in 64bit architecture
 if [ "$ARCH" = "amd64" ] ; then
-   sudo mkisofs -D -r -V "$IMAGE_NAME" -cache-inodes -J -l -quiet -b \
-      boot/grub/i386-pc/eltorito.img -c boot.catalog -no-emul-boot \
-      -boot-load-size 4 -boot-info-table \
-      -eltorito-alt-boot -e EFI/boot/grubx64.efi -no-emul-boot \
+   # sudo mkisofs -D -r -V "$IMAGE_NAME" -cache-inodes -J -l -quiet -b \
+   #    boot/grub/i386-pc/eltorito.img -c boot.catalog -no-emul-boot \
+   #    -boot-load-size 4 -boot-info-table \
+   #    -eltorito-alt-boot -e EFI/boot/grubx64.efi -no-emul-boot \
+   #    -o ../"$ISO_NAME.iso" .
+   # sudo xorriso -as mkisofs -r -V "$IMAGE_NAME" -J -joliet-long -l \
+   #    -iso-level 3 -partition_offset 16 --grub2-mbr ../"$MBR" --mbr-force-bootable \
+   #    -append_partition 2 0xEF ../"$EFI" -appended_part_as_gpt \
+   #    -c boot.catalog -b boot/grub/i386-pc/eltorito.img -no-emul-boot \
+   #    -boot-load-size 4 -boot-info-table --grub2-boot-info -eltorito-alt-boot \
+   #    -e '--interval:appended_partition_2:all::' -no-emul-boot \
+   #    -o ../"$ISO_NAME.iso" .
+    sudo xorriso -as mkisofs -r \
+      -V "$IMAGE_NAME" \
+      --grub2-mbr ../"$MBR" \
+      -partition_offset 16 \
+      --mbr-force-bootable \
+      -append_partition 2 28732ac11ff8d211ba4b00a0c93ec93b ../"$EFI" \
+      -appended_part_as_gpt \
+      -iso_mbr_part_type a2a0d0ebe5b9334487c068b6b72699c7 \
+      -c boot.catalog \
+      -b boot/grub/i386-pc/eltorito.img \
+      -no-emul-boot \
+      -boot-load-size 4 \
+      -boot-info-table \
+      --grub2-boot-info \
+      -eltorito-alt-boot \
+      -e '--interval:appended_partition_2:::' \
+      -no-emul-boot \
       -o ../"$ISO_NAME.iso" .
    # sudo isohybrid -u ../"$ISO_NAME.iso"
 else
@@ -394,6 +427,7 @@ sudo rm -rf extract-cd
 sudo umount mnt
 sudo rm -rf mnt
 sudo rm -rf lzfiles
+sudo rm *.partition
 
 echo
 echo "==============================================================="

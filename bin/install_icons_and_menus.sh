@@ -62,7 +62,7 @@ SPATIAL_TOOLS="r jupyter-notebook* otb-* mapslicer mapnik-* monteverdi*"
 
 #Future home of PostGIS and Spatialite; pgRouting???
 #  pgadmin, sqlitebrowser, etc  (parts of this one are automatic)
-DB_APPS="spatialite-gui *[Rr]asdaman* shp2pgsql-gui phppgadmin"
+DB_APPS="spatialite-gui *[Rr]asdaman* shp2pgsql-gui phppgadmin pgadmin4"
 #disabled: qbrowser
 
 #Server apps part 3 (public good theme)
@@ -510,6 +510,7 @@ fi
 cp "$BUILD_DIR"/../desktop-conf/icons/gnome-globe16blue.svg /usr/local/share/icons/
 cp "$BUILD_DIR"/../desktop-conf/icons/sqlitebrowser.svg /usr/share/pixmaps/
 cp "$BUILD_DIR"/../desktop-conf/icons/inspire.png /usr/local/share/icons/
+cp /usr/share/icons/gnome/32x32/categories/gnome-globe.png /usr/share/icons/
 
 ### make the Education menu less noisy
 #FIXME: first verify we're not vanishing anything which doesn't exist elsewhere

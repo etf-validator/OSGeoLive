@@ -1,6 +1,55 @@
 OSGeo Live GIS Disc
 ===================
 
+Version 16.0alpha2
+====================
+
+ * Updates to MapServer (#2409)
+ * GeoMoose 3.10.1
+
+Version 16.0alpha1
+====================
+
+ * Lubuntu 22.04.1
+ * GDAL 3.6.2
+ * PROJ 9.1.1
+ * GEOS 3.11.1
+ * PostGIS 3.3.2
+ * MapServer 8.0.0
+ * OTB 8.1.0
+ * QGIS 3.22.13
+ * SAGA 8.2.2
+ * Mapbender 3.3.3
+ * Cesium 1.101
+ * pygeoapi 0.13.0
+ * pgRouting 3.4.2
+ * fiona 1.8.22
+ * rasterio 1.3.4
+ * Default desktop image for 16.0
+
+Version 15.0
+====================
+
+ * Fixed iso EFI setup (#2361)
+ * Updated Jupyter Notebooks from GitHub
+ * English documentation finalized
+ * MapProxy 1.15.1
+ * ZOO-Project 1.9.0 (#2382)
+ * t-rex 0.14.3 (#2357)
+ * Updated leaflet demo with FOSS4G 2022 Firenze location (#2384)
+ * Workaround for tomcat9 issue with Java 8 (#2387)
+ * 52nSOS java issue fixed (#2366)
+ * Re3gistry tomcat issue fixed (#2379)
+ * Fixed apache issue with live system (#2396)
+ * pgadmin4-desktop on VM version (#2355)
+ * Mapnik patched to support latest proj (#2352)
+ * Build scripts and installers cleanup
+ * Removed gcc and linux headers from iso (#467)
+ * MapServer docs version 7.6
+ * Updated retired project list (#2318)
+ * Fixed raster data folder (#2336)
+ * actinia 4.2.0 (#2383)
+
 Version 15.0beta2
 ====================
 

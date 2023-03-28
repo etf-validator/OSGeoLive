@@ -8,7 +8,7 @@
 #	         Angelos Tzotsos <tzotsos@gmail.com>
 #
 #############################################################################
-# Copyright (c) 2010-2022 Open Source Geospatial Foundation (OSGeo) and others.
+# Copyright (c) 2010-2023 Open Source Geospatial Foundation (OSGeo) and others.
 # Copyright (c) 2009 LISAsoft
 #
 # Licensed under the GNU LGPL version >= 2.1.
@@ -150,7 +150,7 @@ export USER_NAME
 ./install_grass.sh
 ./install_qgis.sh
 ./install_qgis_server.sh
-# ./install_zoo-project.sh "$ARCH"
+./install_zoo-project.sh "$ARCH"
 ./install_marble.sh
 ./install_opencpn.sh
 ./install_xygrib.sh
@@ -161,8 +161,7 @@ export USER_NAME
 ./install_pycsw.sh
 ./install_pywps.sh
 ./install_pygeoapi.sh
-./install_eoxserver.sh
-# ./install_iris.sh # install_vm_only
+# ./install_eoxserver.sh
 ./install_istsos.sh
 # ./install_actinia.sh # install_vm_only
 
@@ -194,14 +193,14 @@ export USER_NAME
 ./install_geonode.sh
 
 ## Rust
-# ./install_trex.sh # install_vm_only
+./install_trex.sh
 
 ## Javascript et al
 ./install_openlayers.sh
 ./install_leaflet.sh
 ./install_cesium.sh
 ./install_geoext.sh
-# ./install_rasdaman.sh
+# ./install_rasdaman.sh # install_vm_only
 ./install_geostyler.sh
 # ./install_re3gistry.sh # install_vm_only
 # ./install_etf.sh # install_vm_only

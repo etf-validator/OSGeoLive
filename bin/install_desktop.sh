@@ -6,7 +6,7 @@
 # The menu creation and icon sorting has moved to install_icons_and_menus.sh
 #
 #############################################################################
-# Copyright (c) 2009-2022 Open Source Geospatial Foundation (OSGeo) and others.
+# Copyright (c) 2009-2023 Open Source Geospatial Foundation (OSGeo) and others.
 #
 # Licensed under the GNU LGPL.
 #
@@ -45,7 +45,7 @@ cp ../desktop-conf/osgeo-desktop-transparent.png \
 ### Set the desktop background
 sed -i -e 's|^DesktopShortcuts=.*|DesktopShortcuts=Home, Trash|' \
        -e 's|^WallpaperMode=.*|WallpaperMode=fit|' \
-       -e 's|^Wallpaper=.*|Wallpaper=/usr/share/lubuntu/wallpapers/osgeo-desktop.png|' \
+       -e 's|^Wallpaper=.*|Wallpaper=/usr/share/lubuntu/wallpapers/osgeo-desktop-transparent.png|' \
        -e 's|^BgColor=.*|BgColor=#000000|' \
        -e 's|^FgColor=.*|FgColor=#ffffff|' \
        -e 's|^UseTrash=.*|UseTrash=true|' \
@@ -72,7 +72,7 @@ sed -i -e 's|^background=.*|background=/usr/share/lubuntu/wallpapers/osgeo-deskt
 
 # Set the installer desktop icon to OSGeoLive
 sed -i -e 's|Lubuntu|OSGeoLive|' \
-       -e 's|22.04 LTS|15.0beta2|' \
+       -e 's|22.04 LTS|16.0alpha2|' \
    /usr/share/applications/lubuntu-calamares.desktop
 
 #Add the launchhelp script which allows other apps to provide sudo
@@ -120,20 +120,34 @@ Exec=/usr/local/share/osgeo-desktop/desktop-truster.sh
 Type=Application
 EOF
 
+cat << EOF > "/usr/local/share/osgeo-desktop/apache-fixer.desktop"
+[Desktop Entry]
+Name=Apache Fixer
+Comment=Autostarter to fix apache issue on boot
+Exec=/usr/local/share/osgeo-desktop/apache-fixer.sh
+Type=Application
+EOF
+
 mkdir -p "$USER_HOME"/.config/autostart
 cp /usr/local/share/osgeo-desktop/welcome_message.desktop \
    "$USER_HOME"/.config/autostart/
 cp /usr/local/share/osgeo-desktop/desktop-truster.desktop \
+   "$USER_HOME"/.config/autostart/
+cp /usr/local/share/osgeo-desktop/apache-fixer.desktop \
    "$USER_HOME"/.config/autostart/
 mkdir -p /etc/skel/.config/autostart
 cp /usr/local/share/osgeo-desktop/welcome_message.desktop \
    /etc/skel/.config/autostart/
 cp /usr/local/share/osgeo-desktop/desktop-truster.desktop \
    /etc/skel/.config/autostart/
+cp /usr/local/share/osgeo-desktop/apache-fixer.desktop \
+   /etc/skel/.config/autostart/
 
 cp "$BUILD_DIR/../desktop-conf/welcome_message.sh" \
    /usr/local/share/osgeo-desktop/
 cp "$BUILD_DIR/../desktop-conf/desktop-truster.sh" \
+   /usr/local/share/osgeo-desktop/
+cp "$BUILD_DIR/../desktop-conf/apache-fixer.sh" \
    /usr/local/share/osgeo-desktop/
 
 #
